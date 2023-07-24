@@ -1,0 +1,175 @@
+/* header.css */
+
+/* Header container */
+
+
+.header-container {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 100;
+  padding-inline: 2rem;
+}
+
+
+.homepage-header.header-container {
+  background: transparent;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo */
+.logo-image {
+  width: 150px;
+}
+
+/* Menu */
+.menu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap:1.5rem;
+}
+
+.menu li {
+  position: relative;
+  text-transform: uppercase;
+}
+
+.menu li a {
+  color: black;
+  text-decoration: none;
+  font-size:13px;
+}
+
+/* header.css */
+
+.homepage-header .menu li a {
+  color: white;
+  transition: color 0.3s ease-in;
+}
+
+.menu svg{
+  color:black;
+  cursor: pointer;
+}
+
+.homepage-header svg{
+  color:white;
+  transition: color 0.3s ease-in;
+}
+
+.homepage-header:hover{
+  background: white;
+}
+
+.homepage-header:hover  .menu li a{
+  color:black;
+}
+
+.homepage-header:hover  svg{
+  color:black;
+}
+
+
+.dropdown a svg{
+  font-size:11px;
+}
+
+/* Dropdown */
+.dropdown .dropdown-menu {
+  list-style: none;
+  display: none;
+  visibility: hidden;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  width: 150px;
+  z-index: 1;
+  padding:0;
+  height: 300px;
+  padding:0.3rem 0 0.3rem 1rem;
+  box-shadow: 1px 1px 2px #333;
+  transition: visibility 0.3s ease-in;
+}
+
+.dropdown:hover .dropdown-menu {
+  visibility: visible;
+  display: block;
+  box-shadow: 0 0 0 999rem rgba(0,0,0,0.3);
+}
+
+/* Mega menu */
+.mega-menu .mega-menu-content {
+  display: none;
+  position: absolute;
+  top:60%;
+  left: 0;
+  padding: 0.2rem 1rem;
+  z-index: 1;
+}
+
+.mega-menu .row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mega-menu .column {
+  flex: 1;
+}
+
+.dropdown:hover .mega-menu-content {
+  display: block;
+}
+
+/* Submenu */
+.sub-menu {
+  display: none;
+  position: absolute;
+  top: -20%;
+  left: 100%;
+  background-color: #fff;
+  width: 150px;
+  list-style: none;
+  height:300px;
+  padding:0.3rem 1rem;
+}
+
+.submenu-link:hover .sub-menu {
+  display: block;
+}
+
+.sub-menu li {
+  margin-bottom: 5px;
+}
+
+.sub-menu a {
+  color: #333;
+  text-decoration: none;
+}
+
+.sub-menu a:hover {
+  color: #ff5722;
+}
+
+
+
+.cart-item-count{
+  position: absolute;
+  top: -3px;
+  font-size: 8px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  left: 10px;
+  padding: 2px 5px;
+}
+
+/* header.css */
+

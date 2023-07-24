@@ -1,5 +1,6 @@
 {
   "name": "zeyr-custom",
+  "homepage": "https://zeyrcustom.noorularfeen.com",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,20 +8,29 @@
     "start": "vite",
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"  
+    "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@mui/icons-material": "^5.14.1",
+    "@mui/material": "^5.14.1",
     "axios": "^1.4.0",
+    "babel-plugin-root-import": "^6.6.0",
     "bcrypt": "^5.1.0",
     "express": "^4.18.2",
     "http-proxy-middleware": "^2.0.6",
     "jsonwebtoken": "^9.0.1",
+    "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
+    "react-app-rewired": "^2.2.1",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.14.1"
+    "react-redux": "^8.1.1",
+    "react-router-dom": "^6.14.1",
+    "redux": "^4.2.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.14",
