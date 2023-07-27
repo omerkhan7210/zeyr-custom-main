@@ -1,11 +1,9 @@
-import {React,useState,useEffect} from 'react';
+import {React,useState,useEffect, useContext} from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import '../../assets/css/header.css';
-import logo from '../../assets/images/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faChevronDown, faShoppingBag, faMagnifyingGlass, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import jwtDecode from 'jwt-decode'; // Import jwt-decode library
-import CartSidebar from '../Cart/CartSidebar';
+import { CartContext } from '../../App';
 
 
 const Header = ({hostlink}) => {
@@ -19,12 +17,11 @@ const Header = ({hostlink}) => {
     .split('; ')
     .find((row) => row.startsWith('adminToken='))
     ?.split('=')[1]; // Extract the token from the cookie
+    const {cartItemsCount} = useContext(CartContext);
 
     const [isTokenExpired, setIsTokenExpired] = useState(false);
     const [isAdminTokenExpired, setIsAdminTokenExpired] = useState(false);
-    const [cartItems, setCartItems] = useState([]);
-    const [cartItemsCount, setCartItemsCount] = useState(0);
-    const [showCartSidebar, setShowCartSidebar] = useState(false);
+    
   
     useEffect(() => {
       if (token) {
@@ -59,97 +56,157 @@ const Header = ({hostlink}) => {
         // Admin token is not present, set isAdminTokenExpired to true
         setIsAdminTokenExpired(true);
       }
-      
-      // Load cart items from localStorage on component mount
-      const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-      setCartItems(storedCartItems);
-      setCartItemsCount(storedCartItems.length);
-    }, [token]);
-
-    // Toggle cart sidebar visibility
-    const toggleCartSidebar = () => {
-      setShowCartSidebar(true);
-    };
-
-    const handleCloseSidebar = () => {
-      setShowCartSidebar(false);
-    };
-
-    
-  const removeFromCart = (productId) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId));
-  };
-
-  const increaseQuantity = (productId) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
-  };
-
-  const decreaseQuantity = (productId) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === productId ? { ...item, quantity: Math.max(item.quantity - 1, 0) } : item
-      )
-    );
-  };
+    },[token]);
 
 
   return (
-    <header className={`header-container ${isHomepage ? 'homepage-header' : ''}`}>
-      <nav className="navbar">
-        <ul className="menu">
-          <li className="dropdown mega-menu">
-            <Link to="/men">
-              Men <FontAwesomeIcon icon={faChevronDown} />
-            </Link>
-            {/* Rest of the code */}
-          </li>
-          <li className="dropdown mega-menu">
-            <Link to="/women">
-              Women <FontAwesomeIcon icon={faChevronDown} />
-            </Link>
-            {/* Rest of the code */}
-          </li>
-        </ul>
-        <div className="logo">
-          <Link to="/">
-            <img src={logo} alt="Logo" className="logo-image" />
-          </Link>
-        </div>
-        <ul className="menu">
-          <li>
-            <FontAwesomeIcon icon={faMagnifyingGlass} />
-          </li>
-          <li>
-            <FontAwesomeIcon icon={faHeart} />
-          </li>
-          <li>
-            <FontAwesomeIcon icon={faShoppingBag} onClick={toggleCartSidebar} />
-            {cartItemsCount > 0 && <span className="cart-item-count">{cartItemsCount}</span>}
-           
-              {showCartSidebar && <CartSidebar hostlink={hostlink} removeFromCart={removeFromCart} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity}  handleCloseSidebar={handleCloseSidebar} cartItems={cartItems} sidebarVisible={showCartSidebar}/>}
-           
-          </li>
-          
-          <li>
-          {!isTokenExpired ? (
-              <Link to="/my-account">MyZF</Link>
-            ) : (
-              <Link to="/login">MyZF</Link>
-            )}
-          </li>
-        </ul>
-      </nav>
+    
+		<header id="masthead" className={`site-header light  header-v1 transparent-hover ${isHomepage ? 'text-light' : 'text-dark'}`}>
+			<div className="header-main header-contents has-center logo-center menu-center">
+				<div className=" d-grid grid-3 pi4 p1">
+					
+					
+						<nav id="primary-menu" className="main-navigation primary-navigation">
+							<ul className="menu nav-menu">
+								
+									<li className="menu-item menu-item-has-children">
+										<Link >
+									Men <FontAwesomeIcon icon={faChevronDown} />
+									</Link>
+									<ul className="sub-menu">
+										<li className="menu-item menu-item-has-children">
+											<Link>Ready To Wear <FontAwesomeIcon icon={faChevronRight} /></Link>
+											<ul className="sub-menu">
+												<li className="menu-item"> 
+												<Link to="/men">
+												Tshirts 
+												</Link></li>
+												
+											</ul>
+										</li>
+										
+									</ul>
+								</li>
+									<li className="menu-item menu-item-has-children">
+									<Link >
+									Women <FontAwesomeIcon icon={faChevronDown} />
+									</Link>
+									<ul className="sub-menu">
+										<li className="menu-item menu-item-has-children">
+											<Link>Ready To Wear <FontAwesomeIcon icon={faChevronRight} /></Link>
+											<ul className="sub-menu">
+												<li className="menu-item"> 
+												<Link to="/women">
+              									Tshirts
+           										</Link></li>
+												
+											</ul>
+										</li>
+										
+									</ul>
+								</li>
+							</ul>
+						</nav>
+						
+					<div className="header-center-items header-items has-menu">
+						<div className="site-branding">
+							<Link to="/" className="logo">
+								<img src="../src/assets/images/logo.svg" alt="Konte" className="logo-dark"/>
+								<img src="../src/assets/images/logo-light.svg" alt="Konte" className="logo-light"/>
+							</Link>
+							<p className="site-title"><a href="#" rel="home">Zeyr Fineri</a></p>
+						</div>
+						
+					</div>
+					<div class="header-right-items header-items ">
+						<div class="header-account">
+							<a href="#" data-toggle="off-canvas" data-target="login-panel">Sign in</a>
+						</div>
+						<div class="header-search icon-modal">
+							<span class="svg-icon icon-search search-icon" data-toggle="modal" data-target="search-modal">
+								<svg  width="24px" height="24px" viewBox="0 0 24 24">
+									<g>
+										<rect fill="none" width="24" height="24"/>
+										<path d="M20,18.586l-3.402-3.402C17.474,14.015,18,12.57,18,11c0-3.86-3.141-7-7-7c-3.86,0-7,3.14-7,7c0,3.859,3.14,7,7,7 c1.57,0,3.015-0.526,4.184-1.402L18.586,20L20,18.586z M6,11c0-2.757,2.243-5,5-5s5,2.243,5,5s-2.243,5-5,5S6,13.757,6,11z"/>
+									</g>
+								</svg>
+							</span>
+						</div>
+						<div class="header-wishlist">
+							<a href="../other-shop-pages/wishlist.html" class="wishlist-contents">
+								<span class="svg-icon icon-heart-o size-normal ">
+									<svg width="24px" height="24px" viewBox="0 0 24 24">
+										<g>
+											<path d="M16.243,5.843c0.801,0,1.555,0.312,2.121,0.879c1.17,1.17,1.17,3.073,0,4.243l-2.121,2.121l-2.121,2.121L12,17.328 l-2.121-2.121l-2.121-2.121l-2.121-2.121c-0.567-0.567-0.879-1.32-0.879-2.121c0-0.801,0.312-1.555,0.879-2.121 c0.567-0.567,1.32-0.879,2.121-0.879c0.801,0,1.555,0.312,2.121,0.879l0.707,0.707L12,8.843l1.414-1.414l0.707-0.707 C14.688,6.155,15.441,5.843,16.243,5.843 M16.243,3.843c-1.28,0-2.559,0.488-3.536,1.464L12,6.015l-0.707-0.707 c-0.976-0.976-2.256-1.464-3.536-1.464S5.198,4.331,4.222,5.308c-1.953,1.953-1.953,5.118,0,7.071L6.343,14.5l2.121,2.121 L12,20.157l3.536-3.536l2.121-2.121l2.121-2.121c1.953-1.953,1.953-5.118,0-7.071C18.802,4.331,17.522,3.843,16.243,3.843 L16.243,3.843z"/>
+											<rect fill="none" width="24" height="24"/>
+										</g>
+									</svg>
+								</span>
+								<span class="counter wishlist-counter">1</span>
+							</a>
+						</div>
+						<div class="header-cart">
+							<a href="#" data-toggle="off-canvas" data-target="cart-panel">
+								<span class="svg-icon icon-cart size-normal shopping-cart-icon">
+									<svg width="24px" height="24px" viewBox="0 0 24 24">
+										<g>
+											<rect fill="none" width="24" height="24"/>
+											<path d="M19,10h-3V7c0-2.206-1.794-4-4-4S8,4.794,8,7v3H5c-0.55,0-0.908,0.441-0.797,0.979l1.879,9.042
+											C6.194,20.559,6.736,21,7.286,21h9.429c0.55,0,1.092-0.441,1.203-0.979l1.879-9.042C19.908,10.441,19.55,10,19,10z M10,7 c0-1.103,0.897-2,2-2s2,0.897,2,2v3h-4V7z M16.087,19H7.913l-1.455-7h11.313L16.087,19z"/>
+										</g>
+									</svg>
+								</span>
+								<span class="counter cart-counter">{cartItemsCount}</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			  </div>
+        
 
       {!isAdminTokenExpired ? (
         <div className='position-a dashboard-btn-home'>
               <Link to="/dashboard">Admin Dashboard</Link>
         </div>
       ) : null}
+<div className="header-mobile custom logo-center">
+				<div className="konte-container-fluid">
+					<div className="mobile-menu-hamburger">
+						<button className="mobile-menu-toggle hamburger-menu" data-toggle="off-canvas" data-target="mobile-menu">
+							<span className="hamburger-box">
+								<span className="hamburger-inner"></span>
+							</span>
+						</button>
+					</div>
+					<div className="site-branding">
+						<Link to="/"  className="logo">
+							<img src="../src/assets/images/logo.svg" alt="Konte" className="logo-dark"/>
+							<img src="../src/assets/images/logo-light.svg" alt="Konte" class="logo-light"/>
+						</Link>
+						<p className="site-title">
+							<Link to="/" rel="home">ZeyrFineri</Link>
+							</p>
+					</div>
+					<div className="mobile-header-icons">
+						<div className="header-cart">
+							<a href="#" data-toggle="off-canvas" data-target="cart-panel">
+								<span className="svg-icon icon-cart size-normal shopping-cart-icon">
+									<svg width="24px" height="24px" viewBox="0 0 24 24">
+										<g>
+											<rect fill="none" width="24" height="24"></rect>
+											<path d="M19,10h-3V7c0-2.206-1.794-4-4-4S8,4.794,8,7v3H5c-0.55,0-0.908,0.441-0.797,0.979l1.879,9.042
+											C6.194,20.559,6.736,21,7.286,21h9.429c0.55,0,1.092-0.441,1.203-0.979l1.879-9.042C19.908,10.441,19.55,10,19,10z M10,7 c0-1.103,0.897-2,2-2s2,0.897,2,2v3h-4V7z M16.087,19H7.913l-1.455-7h11.313L16.087,19z"></path>
+										</g>
+									</svg>
+								</span>
+								<span className="counter cart-counter">2</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
     </header>
+
   );
 };
 

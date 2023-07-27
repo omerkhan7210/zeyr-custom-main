@@ -527,39 +527,34 @@ createTable(queryTable3);
   }
 });
 
-//ADMIN LOGIN
 app.post('/admin/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
     // Find the user in the database
-    pool.query('SELECT * FROM admins WHERE email = ?', [email], async (error, results) => {
-      if (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Server error' });
-      }
+    const [results, fields] = await pool.query('SELECT * FROM admins WHERE email = ?', [email]);
 
-      // Check if user exists
-      if (results.length === 0) {
-        return res.status(401).json({ message: 'Invalid email or password' });
-      }
+    // Check if user exists
+    if (results.length === 0) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
 
-      const user = results[0];
-      // Compare the password
-      const isPasswordValid = await compare(password, user.password);
-      if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Invalid email or password' });
-      }
+    const user = results[0];
+    // Compare the password
+    const isPasswordValid = await compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid password' });
+    }
 
-    const token = jwt.sign({ email }, jwtSecret, { expiresIn: '4h' });
+    const token = sign({ email }, jwtSecret, { expiresIn: '4h' });
 
     res.status(200).json({ message: 'Admin login successful', token });
-    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 
 app.post(
@@ -820,9 +815,6 @@ const upload = multer({ storage: storage });
   })
   
 
-
-// Assuming you have already set up your Express server and database connection
-// Endpoint to get all products
 app.get("/products", (req, res) => {
   // Query to fetch all products from the database
   const getAllProductsQuery = "SELECT * FROM products";

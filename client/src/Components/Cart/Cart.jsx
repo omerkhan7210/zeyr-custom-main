@@ -1,11 +1,11 @@
 // src/components/Cart.js
 import React,{useState,useContext} from 'react';
-import { AppContext } from '../Categories/DisplayProducts';
+import {CartContext} from '../../App';
 import CartSidebar from './CartSidebar';
 
 const Cart = ({hostlink}) => {
 
-  const {cartItems,sidebarVisible,removeFromCart,handleCloseSidebar,increaseQuantity,decreaseQuantity} = useContext(AppContext); 
+  const {cartItems,sidebarVisible,removeFromCart,handleCloseSidebar,increaseQuantity,decreaseQuantity} = useContext(CartContext); 
 
   return (
     <div>

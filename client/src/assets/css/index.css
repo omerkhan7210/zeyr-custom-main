@@ -15,41 +15,6 @@
 }
 
 
-a {
-  font-weight: 500;
-  color: black;
-  font-size:13px;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border: 1px solid transparent;
-  cursor: pointer;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
 
 /*DISPLAYS*/
 .d-flex{
@@ -60,6 +25,12 @@ button {
 }
 .d-grid{
   display: grid;
+}
+
+
+/*grid columns*/
+.grid-3{
+  grid-template-columns: repeat(3,1fr);
 }
 
 /*POSITIONS*/
@@ -128,6 +99,61 @@ button {
   gap:5rem;
 }
 
+
+/*MARGINS*/
+.mt1{
+  margin-top: 1rem;
+}
+.mt2{
+  margin-top: 2rem;
+}
+.mt3{
+  margin-top: 3rem;
+}
+.mt4{
+  margin-top: 4rem;
+}
+.mt5{
+  margin-top: 5rem;
+}
+
+/*PADDINGS*/
+.p1{
+  padding: 1rem;
+}
+
+.p2{
+  padding: 2rem;
+}
+
+.p3{
+  padding: 3rem;
+}
+
+.p4{
+  padding: 4rem;
+}
+
+.p5{
+  padding: 5rem;
+}
+
+
+.pi1{
+  padding-inline: 1rem;
+}
+.pi2{
+  padding-inline: 2rem;
+}
+.pi3{
+  padding-inline: 3rem;
+}
+.pi4{
+  padding-inline: 4rem;
+}
+.pi5{
+  padding-inline: 5rem;
+}
 
 
 /*WIDTHS*/
@@ -361,12 +387,18 @@ td {
       top: 2px;
     }
 
+    /*MARGINS*/
+    .mauto{
+      margin:auto;
+    }
+
 /* header.css */
 
 .video-container-home {
   width: 100%;
   position: relative;
   padding-top: 56.25%; /* Aspect ratio for a 16:9 video */
+  padding-bottom:10rem;
 }
 
 .video-home {

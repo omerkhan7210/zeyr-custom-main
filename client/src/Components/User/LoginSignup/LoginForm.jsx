@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , Link} from 'react-router-dom';
 
 
-const LoginForm = ({hostlink}) => {
+const LoginForm = ({hostlink,noClasses}) => {
   const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -30,27 +30,38 @@ const LoginForm = ({hostlink}) => {
   };
 
   return (
-    <div  className='signup-container'>
-      <h2 className="signup-heading"> Login</h2>
+
+    
+    <form className={`${noClasses ? null : "d-flex justify-center flex-c align-center w25   mauto"} products-form products-form-login login`}  method="post" onSubmit={handleSubmit}>
       {errorMessage && <p>{errorMessage}</p>}
-      <form onSubmit={handleSubmit} className="signup-form">
-        <input
-          type="email"
+					<p className="form-row w100">
+						<label htmlFor="panel_username">Email</label>
+						<input  className="input-text w100"  id="panel_username" type="email"
           placeholder="Email"
           value={email}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="password"
+          onChange={(e) => setUsername(e.target.value)} />
+					</p>
+					<p className="form-row w100">
+						<label htmlFor="panel_password">Password</label>
+						<input className="input-text w100"  name="password" id="panel_password"  type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <p><a href="/forgot-password" className='login-red-btn'>Forgot Your Password?</a></p>
-        <button type="submit" className='form-btn'>Sign In</button>
-      </form>
-      <p><a href="/signup" className='login-red-btn'> Create An Account</a></p>
-    </div>
+					</p>
+					<p className="form-row d-flex justify-center">
+						<button type="submit" className="button large"  defaultValue="Sign in" data-signing="Siging in..." data-signed="Signed In">Sign in</button>
+						
+					</p>
+          <p className="lost_password">
+						<Link href="/forgot-password">Lost your password?</Link>
+					</p>
+          <p className="form-row w100 d-flex justify-center">
+          <Link to="/signup"> <span className="create-account button large alt">Create An Account</span></Link>
+          </p>
+				
+				</form>
+   
   );
 };
 

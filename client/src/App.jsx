@@ -21,10 +21,16 @@ import ProductList from './Components/Admin/ProductOperations/ProductList';
 import Categories from './Components/Admin/ProductOperations/Categories';
 import axios from 'axios';
 import ProductDetailsPage from './Components/Products/ProductDetailPage';
+import Footer from './Components/HeaderFooter/Footer';
+import MobileHeader from './Components/HeaderFooter/MobileHeader';
+import SearchModal from './Components/HeaderFooter/SearchModal';
+import CartSidebar from './Components/Cart/CartSidebar';
+import LoginSidebar from "./Components/User/LoginSignup/LoginSidebar"
+
 
 
 export const ProductContext = createContext();
-
+export const CartContext = createContext();
 
 const App = () => {
 //const hostLink = "https://zeyrserver.noorularfeen.com";
@@ -47,9 +53,6 @@ const [formData, setFormData] = useState({
     status: "draft", // Status can be either "draft" or "published"
     variations: [], // An array to hold different variations based on the selected attributes
 });
-
-
-
 
 const handleSubmit = async (e) => {
   e.preventDefault();
@@ -131,6 +134,78 @@ const handleImageRemove = (index) => {
 };
 
 
+//DISPLAY CART ITEMS
+const initialCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+const [cartItems, setCartItems] = useState(initialCartItems);
+const [sidebarVisible, setSidebarVisible] = useState(false);
+
+const addToCart = (product) => {
+const existingItem = cartItems.find((item) => item.id === product.id);
+
+if (existingItem) {
+  // If the item already exists in the cart, update its quantity
+  setCartItems((prevItems) =>
+    prevItems.map((item) =>
+      item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+    )
+  );
+} else {
+  // If the item doesn't exist, add it to the cart with quantity 1
+  setCartItems((prevItems) => [...prevItems, { ...product, quantity: 1 }]);
+}
+
+setSidebarVisible(true); // Show the sidebar when an item is added to the cart
+};
+
+
+const removeFromCart = (productId) => {
+  setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId));
+};
+
+const increaseQuantity = (productId) => {
+  setCartItems((prevItems) =>
+    prevItems.map((item) =>
+      item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
+    )
+  );
+};
+
+const decreaseQuantity = (productId) => {
+  setCartItems((prevItems) =>
+    prevItems.map((item) =>
+      item.id === productId ? { ...item, quantity: Math.max(item.quantity - 1, 0) } : item
+    )
+  );
+};
+
+
+const handleCloseSidebar = () => {
+  setSidebarVisible(false);
+};
+
+useEffect(() => {
+  // Save cart items to localStorage whenever they change
+  localStorage.setItem('cartItems', JSON.stringify(cartItems));
+}, [cartItems]);
+
+
+//HEADER CART ICON
+const [cartItemsCount, setCartItemsCount] = useState(0);
+    const [showCartSidebar, setShowCartSidebar] = useState(false);
+
+    useEffect(() => {
+      // Load cart items from localStorage on component mount
+      const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+      setCartItemsCount(storedCartItems.length);
+    }, []);
+
+    // In your CartContext or App.js
+const toggleCartSidebar = () => {
+  setShowCartSidebar((prevState) => !prevState);
+};
+
+
+
 //ETCHING ALL THE PRODUCTS
 
 const [menProducts, setMenProducts] = useState([]);
@@ -142,7 +217,7 @@ useEffect(() => {
       const response = await axios.get(`${hostLink}/products`);
       // Filter products for men
       const menProducts = response.data.filter((product) => product.categories.toLowerCase() === 'men');
-      setMenProducts(menProducts);
+      setMenProducts(menProducts)
       // Filter products for women
       const womenProducts = response.data.filter((product) => product.categories.toLowerCase() === 'women');
       setWomenProducts(womenProducts);
@@ -153,16 +228,32 @@ useEffect(() => {
   fetchProducts();
 }, [hostLink]);
 
+
   
   return (
     <Router>
-      <>
+      <> 
+
+      <CartContext.Provider value={{addToCart,removeFromCart,increaseQuantity,decreaseQuantity,handleCloseSidebar,cartItems,sidebarVisible,setSidebarVisible, cartItemsCount,showCartSidebar,toggleCartSidebar}}>
         <Header hostlink={hostLink} />
+        </CartContext.Provider>
+
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/men" element={<MenPage hostlink={hostLink} menProducts={menProducts}/>} />
-          <Route path="/women" element={<WomenPage womenProducts={womenProducts} hostlink={hostLink}/>} />
+
+          <Route path="/men" element={ 
+          <CartContext.Provider value={{addToCart,removeFromCart,increaseQuantity,decreaseQuantity,handleCloseSidebar,cartItems,sidebarVisible,setSidebarVisible,hostLink}}>
+            <MenPage  menProducts={menProducts} hostlink={hostLink}/>
+            </CartContext.Provider>
+          } />
+
+          <Route path="/women" element={
+          <CartContext.Provider value={{addToCart,removeFromCart,increaseQuantity,decreaseQuantity,handleCloseSidebar,cartItems,sidebarVisible,setSidebarVisible,hostLink}}>
+          <WomenPage womenProducts={womenProducts} hostlink={hostLink}/>
+          </CartContext.Provider>
+          } />
+
           <Route path="/contact" element={<ContactPage />} />
 
           <Route path={`/products/:productId`} element={<ProductDetailsPage hostlink={hostLink}/>} />
@@ -207,6 +298,14 @@ useEffect(() => {
          
 
         </Routes>
+        <Footer/>
+        <LoginSidebar hostlink={hostLink}/>
+        <SearchModal/>
+        <CartContext.Provider value={{addToCart,removeFromCart,increaseQuantity,decreaseQuantity,handleCloseSidebar,cartItems,sidebarVisible,setSidebarVisible, cartItemsCount,showCartSidebar,toggleCartSidebar}}>
+        <CartSidebar hostlink={hostLink} />
+        </CartContext.Provider>
+        <MobileHeader/>
+						
       </>
     </Router>
   );
