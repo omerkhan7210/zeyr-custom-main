@@ -111,8 +111,8 @@ const Header = ({hostlink}) => {
 					<div className="header-center-items header-items has-menu">
 						<div className="site-branding">
 							<Link to="/" className="logo">
-								<img src="../src/assets/images/logo.svg" alt="Konte" className="logo-dark"/>
-								<img src="../src/assets/images/logo-light.svg" alt="Konte" className="logo-light"/>
+								<img src="/images/logo.svg" alt="Konte" className="logo-dark"/>
+								<img src="/images/logo-light.svg" alt="Konte" className="logo-light"/>
 							</Link>
 							<p className="site-title"><a href="#" rel="home">Zeyr Fineri</a></p>
 						</div>
@@ -180,8 +180,8 @@ const Header = ({hostlink}) => {
 					</div>
 					<div className="site-branding">
 						<Link to="/"  className="logo">
-							<img src="../src/assets/images/logo.svg" alt="Konte" className="logo-dark"/>
-							<img src="../src/assets/images/logo-light.svg" alt="Konte" class="logo-light"/>
+							<img src="/images/logo.svg" alt="Konte" className="logo-dark"/>
+							<img src="/images/logo-light.svg" alt="Konte" class="logo-light"/>
 						</Link>
 						<p className="site-title">
 							<Link to="/" rel="home">ZeyrFineri</Link>

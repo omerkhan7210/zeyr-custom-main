@@ -926,12 +926,31 @@ app.get("/products/:productId", (req, res) => {
           });
         });
       };
+        // Fetch attribute type for each variation
+        const getAttributesTypeQuery =
+        "SELECT * FROM attributes WHERE productId = ?";
+        const fetchAttributeType = (variation) => {
+        return new Promise((resolve, reject) => {
+          pool.query(getAttributesTypeQuery, [productId], (error, attributeTypeResult) => {
+            if (error) {
+              reject(error);
+            }
+            product.attributes = attributeTypeResult;
+            resolve(variation);
+          });
+        });
+        };
 
-      // Use Promise.all to fetch attributes for all variations in parallel
-      Promise.all(variationsResult.map(fetchAttributes))
+        // Use Promise.all to fetch attributes and attribute types for all variations in parallel
+        Promise.all(variationsResult.map(fetchAttributes))
         .then((variationsWithAttributes) => {
           // Replace variationsResult with the variationsWithAttributes array
           product.variations = variationsWithAttributes;
+          return Promise.all(variationsWithAttributes.map(fetchAttributeType));
+        })
+        .then((variationsWithAttributeTypes) => {
+          // Replace variationsResult with the variationsWithAttributeTypes array
+          product.variations = variationsWithAttributeTypes;
           res.status(200).json({ product });
         })
         .catch((error) => {

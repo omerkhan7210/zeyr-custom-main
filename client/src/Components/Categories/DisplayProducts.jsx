@@ -33,9 +33,10 @@ const DisplayProducts = ({hostlink,products }) => {
                 <ProductOrdering/>
 
 								<p className="products-result-count">   {products.length} {products.length > 1 ? "Products" : "Product"}</p>
-                <ProductList hostlink={hostlink} products={products} />
-                <Cart hostlink={hostlink} />
+                
     	      </div>
+			  <ProductList hostlink={hostlink} products={products} />
+                
 						</div>
 
 						<nav className="products-navigation next-posts-navigation ajax-navigation ajax-loadmore">

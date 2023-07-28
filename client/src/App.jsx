@@ -33,8 +33,8 @@ export const ProductContext = createContext();
 export const CartContext = createContext();
 
 const App = () => {
-//const hostLink = "https://zeyrserver.noorularfeen.com";
-const hostLink = "http://localhost:5000";
+const hostLink = "https://zeyrserver.noorularfeen.com";
+//const hostLink = "http://localhost:5000";
 const path = "/dashboard";
    
 const [formData, setFormData] = useState({

@@ -32,9 +32,6 @@ const ProductDetailsPage = ({ hostlink }) => {
   if (!product) {
     return <div>Loading...</div>;
   }
-  console.log(product)
-
-   
 
   return (
 
@@ -43,12 +40,7 @@ const ProductDetailsPage = ({ hostlink }) => {
 				<div id="primary" className="content-area">
 					<main id="main" className="site-main">
 
-          <ProductDetailsContext.Provider value={
-            {
-              product, 
-              hostlink
-            }
-          }>
+          <ProductDetailsContext.Provider value={{ product, hostlink }}>
 
 						<div className="layout-v2 clearfix background-set product first instock has-post-thumbnail">
 

@@ -2,29 +2,52 @@
 import React, { useContext, useState } from "react";
 import { ProductDetailsContext } from "../ProductDetailPage"; // Replace with your actual context import
 
-const ProductVariationsRow = () => {
+const ProductVariationsRow = ({setSelectedVariations}) => {
   const { product } = useContext(ProductDetailsContext);
-  const [selectedVariation, setSelectedVariation] = useState(
-    product.variations[0] // Set the default variation as the first one
-  );
+  
+   // Group variations based on attribute types (color and size)
+   const variationsByAttributeType = product.variations.reduce((acc, variation) => {
+    const attributeType = product.attributes.find(
+      (attr) => attr.id === variation.attributes[0].attributeId
+    ).attributeType;
 
-  const handleAttributeClick = (variation) => {
-    setSelectedVariation(variation); // Update the selected variation when an attribute is clicked
+    if (!acc[attributeType]) {
+      acc[attributeType] = [];
+    }
+
+    acc[attributeType].push(variation);
+    return acc;
+  }, {});
+
+  // Function to handle selection change in dropdown
+  const handleSelectChange = (attributeType, event) => {
+    setSelectedVariations((prevSelected) => ({
+      ...prevSelected,
+      [attributeType]: event.target.value,
+    }));
   };
 
+
   return (
-    <table>
-      <tbody>
-        {product.variations.map((variation) => (
-          <tr key={variation.id}>
-            <td className="label">
-              <label>{variation.attributes[0].attributeValue}</label>
-            </td>
-            
-          </tr>
-        ))}
-      </tbody>
-    </table>
+      
+          <div style={{borderBottom:'1px solid grey'}}>
+      {Object.entries(variationsByAttributeType).map(([attributeType, variations]) => (
+        <div key={attributeType} className="d-flex justify-between align-center">
+          <p>{attributeType.toUpperCase()}</p>
+          <select onChange={(e) => handleSelectChange(attributeType, e)}>
+            <option defaultValue={null}>Choose an option</option>
+            {variations.map((variation) => (
+              <option key={variation.id} value={variation.id} >
+                {variation.attributes[0].attributeValue}
+              </option>
+            ))}
+          </select>
+        </div>
+      ))}
+
+     
+    </div>
+
   );
 };
 

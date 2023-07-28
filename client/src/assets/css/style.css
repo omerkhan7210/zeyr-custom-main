@@ -15767,12 +15767,12 @@ ul.products.layout-carousel .loading-placeholder .spinner, ul.products.layout-ca
 	padding-left: 60px;
 	padding-right: 60px;
 	display: flex;
-	gap:1rem
+	gap:3rem
 }
 
 .product-gallery{
-	max-width:70%;
-	width: 70%;
+	max-width:60%;
+	width: 60%;
 }
 
 .product-gallery__image {
@@ -26080,4 +26080,10 @@ label.products-form__label-for-checkbox :checked ~ span:after {
 	.maintenance-layout-fullscreen .text-light .mc4wp-form select {
 		min-width: auto;
 	}
+}
+
+.product {
+border:1px solid rgba(0,0,0,0.1);
+margin:1px;
+padding:20px 5px 20px 20px !important;
 }

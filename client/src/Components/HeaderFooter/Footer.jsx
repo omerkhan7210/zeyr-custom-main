@@ -10,8 +10,8 @@ import React from "react";
 						<div className="widget widget_text">
 							<div className="textwidget">
 								<p className="ml-n-5">
-									<img className="logo-dark" src="../src/assets/images/logo.svg" alt="Konte Logo"/>
-									<img src="../src/assets/images/logo-light.svg" alt="Konte" className="logo-light"/>
+									<img className="logo-dark" src="/images/logo.svg" alt="Konte Logo"/>
+									<img src="/images/logo-light.svg" alt="Konte" className="logo-light"/>
 								</p>
 								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,<br/> sed do eiusmod tempor incididunt ut labore</p><p>konte@uix.store<br/> +1 248-785-8545
 								</p>
