@@ -1,13 +1,13 @@
 import React, { useState, useEffect,useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import ProductAddEditForm from './ProductAddEditForm';
-import { ProductContext } from "../../../App";
+import ProductAddEditForm from './ProductAddEditForm/ProductAddEditForm';
 import axios from 'axios';
+import { AddProductAdminContext } from '../../Context/AddProductContext';
 
 
 const EditProduct = ({hostLink}) => {
   const { productId } = useParams();
-  const {handleSubmitEdit,setFormData} = useContext(ProductContext)
+  const {handleSubmitEdit,setFormData} = useContext(AddProductAdminContext)
   
 const fetchProductDetails = async () => {
   try {

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import validator from 'validator';
+import DOMPurify from 'dompurify';
 import { useNavigate } from 'react-router-dom';
 
 const AdminLogin = ({ hostlink }) => {
@@ -11,6 +13,19 @@ const AdminLogin = ({ hostlink }) => {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const history = useNavigate();
+
+  
+     // Validate email and password inputs
+     if (!validator.isEmail(email)) {
+      setErrorMessage('Please enter a valid email address.');
+      return;
+    }
+  
+    if (validator.isEmpty(password)) {
+      setErrorMessage('Please enter your password.');
+      return;
+    }
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,30 +47,34 @@ const AdminLogin = ({ hostlink }) => {
       }, 1000);
     } catch (error) {
       console.log(error)
-      setErrorMessage(error.response.data.message);
+      setErrorMessage(DOMPurify.sanitize(error.response.data.message));
     } finally {
       setLoading(false); // Hide the loading icon
     }
   };
 
   return (
-    <div className='signup-container'>
+    <div className='d-flex flex-c align-center justify-center g1'>
       <h2 className='signup-heading'>Admin Login</h2>
-      <form onSubmit={handleSubmit} className='signup-form'>
-        <div>
-          <p>{errorMessage}</p>
+      <form onSubmit={handleSubmit} className='w100'>
+      <p>{errorMessage}</p>
+      <p className="form-row w100">
+          
           <label>Email:</label>
-          <input type="email" name="email" value={formData.email} onChange={handleChange} required />
-        </div>
-        <div>
+          <input type="email" className='input-text w100' value={formData.email} onChange={handleChange} required />
+        </p>
+        <p className="form-row w100">
           <label>Password:</label>
-          <input type="password" name="password" value={formData.password} onChange={handleChange} required />
-        </div>
-        <button type="submit" className='form-btn' disabled={loading}>
+          <input type="password" className='input-text w100' value={formData.password} onChange={handleChange} required />
+        </p>
+        <p className="form-row w100 d-flex justify-center">
+        <button type="submit" className='button medium' disabled={loading}>
           {loading ? 'Loading...' : 'Login'}
         </button>
+        {successMessage && <p>{successMessage}</p>}
+        </p>
       </form>
-      {successMessage && <p>{successMessage}</p>}
+      
     </div>
   );
 };

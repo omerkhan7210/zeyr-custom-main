@@ -1,9 +1,8 @@
 // src/App.js
 import React from 'react';
-import ProductList from '../Products/ProductList';
-import Cart from '../Cart/Cart';
-import ProductOrdering from '../Products/ProductOrdering';
-import ProductsFilter from '../Products/ProductsFilter';
+import ProductList from '../Products/ProductsList/ProductList';
+import ProductOrdering from '../Products/ProductsList/ProductOrdering';
+import ProductsFilter from '../Products/ProductsList/ProductsFilter';
 
 
 const DisplayProducts = ({hostlink,products }) => {
@@ -30,18 +29,15 @@ const DisplayProducts = ({hostlink,products }) => {
 
 								<ProductsFilter/>
 
-                <ProductOrdering/>
+                				<ProductOrdering/>
 
 								<p className="products-result-count">   {products.length} {products.length > 1 ? "Products" : "Product"}</p>
                 
-    	      </div>
-			  <ProductList hostlink={hostlink} products={products} />
+    	      				</div>
+			  				<ProductList hostlink={hostlink} products={products} />
                 
 						</div>
-
-						<nav className="products-navigation next-posts-navigation ajax-navigation ajax-loadmore">
-							<div className="nav-links"><a href="#">Load more</a></div>
-						</nav>
+						
 					</main>
 				</div>
 			</div>

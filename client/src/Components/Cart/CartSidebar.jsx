@@ -1,51 +1,60 @@
 // src/components/CartSidebar.js
 import React,{useContext} from 'react';
-import { CartContext } from '../../App';
+import { CartContextC } from '../Context/CartContext';
 import CartItem from './CartItem';
+import { Link } from 'react-router-dom';
 
 const CartSidebar = ({hostlink}) => {
 
-  const {cartItems,handleCloseSidebar,showCartSidebar,toggleCartSidebar} = useContext(CartContext); 
-
-// Calculate the total quantity of items in the cart
-const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const {cartItems} = useContext(CartContextC); 
+ // Calculate the total price by multiplying the price of each item with its quantity and then summing them up
+ const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
   return (
 
-    <div id="cart-panel" className={`cart-panel offscreen-panel ${showCartSidebar ? ' open' : ''}`}>
+    <div id="cart-panel" className="cart-panel offscreen-panel">
 		<div className="backdrop"></div>
 		<div className="panel">
-			<div className="hamburger-menu button-close active" onClick={toggleCartSidebar}>
+			<div className="hamburger-menu button-close active">
 				<span className="menu-text" >Close</span>
 				<div className="hamburger-box">
 					<div className="hamburger-inner"></div>
 				</div>
 			</div>
 			<div className="panel-header">
-				<h3>Cart <span className="cart-panel-counter">{totalQuantity}</span></h3>
+			{cartItems.length === 0 ? null :(
+				<h1 style={{marginBottom:'0px'}}>Your Shopping Bag </h1>
+			)
+			}
 			</div>
 			<div className="panel-content">
 				<div className="widget_shopping_cart_content products">
-					<ul className="mini-cart cart_list product_list_widget ">
+					
 					
 						{cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
-      ) : (
-        cartItems.map((item) => (
-          <CartItem key={item.id} item={item}  hostlink={hostlink} />
-        ))
-      )}
-					</ul>
-					<p className="mini-cart__total total">
-						<strong>Subtotal:</strong>
-						<span className="amount">
-							<span className="currencySymbol">$</span>PRODUCTS SUBTOTAL
-						</span>
-					</p>
-					<p className="mini-cart__buttons buttons">
-						<a href="other-shop-pages/cart.html" className="button">View cart</a>
-						<a href="other-shop-pages/checkout.html" className="button checkout">Checkout</a>
-					</p>
+						<p>Your Shopping Bag is empty.</p>
+						) : (
+							<>
+							<ul className="mini-cart cart_list product_list_widget ">
+							{cartItems.map((item) => (
+							<CartItem key={item.id} item={item}  hostlink={hostlink} />
+							
+							))}
+							</ul>
+							<p className="mini-cart__total total">
+								<strong>Subtotal:</strong>
+								<span className="amount">
+									<span className="currencySymbol">$</span>{totalPrice}
+								</span>
+							</p>
+							<p className="mini-cart__buttons buttons">
+								<Link to="/cart" className="button">View cart</Link>
+								<Link to="/checkout" className="button checkout">Checkout</Link>
+							</p>
+							</>
+						)}
+					
+					
 				</div>
 			</div>
 		</div>

@@ -1,17 +1,24 @@
-import React,{createContext,useState,useEffect} from 'react';
+import React,{useState,useEffect} from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+//GLOBAL ELEMENTS
 import Header from './Components/HeaderFooter/Header';
+import Footer from './Components/HeaderFooter/Footer';
+import MobileHeader from './Components/HeaderFooter/MobileHeader';
+import SearchModal from './Components/HeaderFooter/Search/SearchModal';
+import CartSidebar from './Components/Cart/CartSidebar';
+import LoginSidebar from "./Components/User/LoginSignup/LoginComponents/LoginSidebar"
+//STATIC PAGES
 import HomePage from './Components/Static/HomePage';
 import AboutPage from './Components/Static/AboutPage';
-import MenPage from './Components/Categories/MenPage';
-import WomenPage from './Components/Categories/WomenPage';
 import ContactPage from './Components/Static/ContactPage';
-import LoginForm from './Components/User/LoginSignup/LoginForm';
+//USER LOGIN SIGNUP
+import LoginPage from './Components/User/LoginSignup/LoginComponents/LoginPage';
 import SignupForm from './Components/User/LoginSignup/SignupForm';
 import ForgotPassword from './Components/User/LoginSignup/ForgotPassword';
 import ResetPassword from './Components/User/LoginSignup/ResetPassword';
 import MyAccount from './Components/User/UserAccount/MyAccount';
-import ViewAddress from './Components/User/UserAccount/ViewAddress';
+import ViewAddress from './Components/User/UserAccount/Addresses/ViewAddress';
+// ADMIN PAGES
 import AdminLogin from './Components/Admin/AdminLogin';
 import AdminRegister from './Components/Admin/AdminRegister';
 import AdminDashboard from './Components/Admin/AdminDashboard';
@@ -19,202 +26,44 @@ import AddProduct from './Components/Admin/ProductOperations/AddProduct';
 import EditProduct from './Components/Admin/ProductOperations/EditProduct';
 import ProductList from './Components/Admin/ProductOperations/ProductList';
 import Categories from './Components/Admin/ProductOperations/Categories';
+//PRODUCT DETAILS
+import ProductDetailsPage from './Components/Products/ProductDetails/ProductDetailPage';
+import MenPage from './Components/Categories/MenPage';
+import WomenPage from './Components/Categories/WomenPage';
+//CART WISHLIST CHECKOUT PAGES
+import WishlistPage from "./Components/Wishlist/WishlistPage"
+import CartPage from './Components/Cart/CartPage/CartPage';
+import CheckoutPage from "./Components/Checkout/CheckoutPage"
+//CONTEXT IMPORT 
+import AddProductContext from "./Components/Context/AddProductContext";
+import CartContext from "./Components/Context/CartContext";
+import WishlistContext from "./Components/Context/WishlistContext";
+import TokenContext from './Components/Context/TokenContext';
+import LoginContext from './Components/Context/LoginContext';
+import LocationInfo from './Components/Context/LocationInfo'
+import UserDetails from './Components/Context/UserDetails'
+//AXIOS PCKG
 import axios from 'axios';
-import ProductDetailsPage from './Components/Products/ProductDetailPage';
-import Footer from './Components/HeaderFooter/Footer';
-import MobileHeader from './Components/HeaderFooter/MobileHeader';
-import SearchModal from './Components/HeaderFooter/SearchModal';
-import CartSidebar from './Components/Cart/CartSidebar';
-import LoginSidebar from "./Components/User/LoginSignup/LoginSidebar"
-
-
-
-export const ProductContext = createContext();
-export const CartContext = createContext();
 
 const App = () => {
-const hostLink = "https://zeyrserver.noorularfeen.com";
-//const hostLink = "http://localhost:5000";
+
+
+//const hostLink = "https://zeyrserver.noorularfeen.com";
+const hostLink = "http://localhost:5000";
 const path = "/dashboard";
-   
-const [formData, setFormData] = useState({
-  name: '',
-  price: '',
-  categories: '',
-  sku: '',
-  isOnSale: false,
-  isFeatured: false,
-  featuredImage: null,
-  thumbnailImages: [],
-  videos: '',
-  shortDescription: '',
-  longDescription: '',
-  attributes: [], // An array to hold product attributes (e.g., size, color, etc.)
-    status: "draft", // Status can be either "draft" or "published"
-    variations: [], // An array to hold different variations based on the selected attributes
-});
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  try {
-
-    // Convert variations array to a JSON string
-    const variationsJson = JSON.stringify(formData.variations);
-
-    // Create the final formData object to send to the server
-    const formDataToSend = {
-      ...formData,
-      variations: variationsJson,
-    };
-
-    // Convert the thumbnail images array to a FormData object to handle file upload
-    const formDataWithFiles = new FormData();
-    for (const key in formData) {
-      if (key === 'thumbnailImages') {
-        for (const thumbnailImage of formData.thumbnailImages) {
-          formDataWithFiles.append('thumbnailImages', thumbnailImage);
-        }
-      } else if (key === 'featuredImage' && formData.featuredImage) {
-        formDataWithFiles.append('featuredImage', formData.featuredImage);
-      } else {
-        formDataWithFiles.append(key, formData[key]);
-        
-      }
-      
-    }
-
-
-    // Send JSON data separately using 'application/json' content type
-    const response = await axios.post(`${hostLink}/products`, formDataToSend, {
-      headers: {
-        'Content-Type': 'application/json', // Set the correct content type for JSON data
-      },
-    });
-
-    const productId = response.data.productId;
-
-    
-    await axios.post(`${hostLink}/upload-images${productId}`, formDataWithFiles);
-
-    window.location.href = '/dashboard/product-list';
-  
-}catch (error) {
-  console.error(error);
-}
-  
-  }
-
-const handleSubmitEdit = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await axios.put(`${hostLink}/products/${productId}`, productData);
-    console.log('Product updated successfully:', response.data);
-    // Redirect or perform any other action after updating the product
-  } catch (error) {
-    console.error('Error updating product:', error);
-  }
-};
-
-
-    
-// Function to handle file input change and generate preview URLs
-const handleFileChange = (e) => {
-  const files = e.target.files;
-  if (e.target.name === 'featuredImage') {
-    setFormData({ ...formData, featuredImage: files[0] });
-  } else if (e.target.name === 'thumbnailImages') {
-    setFormData({ ...formData, thumbnailImages: [...files] });
-  }
-};
-  
-const handleImageRemove = (index) => {
-  const newThumbnailImages = formData.thumbnailImages.filter((_, i) => i !== index);
-  setFormData({ ...formData, thumbnailImages: newThumbnailImages });
-};
-
-
-//DISPLAY CART ITEMS
-const initialCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-const [cartItems, setCartItems] = useState(initialCartItems);
-const [sidebarVisible, setSidebarVisible] = useState(false);
-
-const addToCart = (product) => {
-const existingItem = cartItems.find((item) => item.id === product.id);
-
-if (existingItem) {
-  // If the item already exists in the cart, update its quantity
-  setCartItems((prevItems) =>
-    prevItems.map((item) =>
-      item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-    )
-  );
-} else {
-  // If the item doesn't exist, add it to the cart with quantity 1
-  setCartItems((prevItems) => [...prevItems, { ...product, quantity: 1 }]);
-}
-
-setSidebarVisible(true); // Show the sidebar when an item is added to the cart
-};
-
-
-const removeFromCart = (productId) => {
-  setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId));
-};
-
-const increaseQuantity = (productId) => {
-  setCartItems((prevItems) =>
-    prevItems.map((item) =>
-      item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
-    )
-  );
-};
-
-const decreaseQuantity = (productId) => {
-  setCartItems((prevItems) =>
-    prevItems.map((item) =>
-      item.id === productId ? { ...item, quantity: Math.max(item.quantity - 1, 0) } : item
-    )
-  );
-};
-
-
-const handleCloseSidebar = () => {
-  setSidebarVisible(false);
-};
-
-useEffect(() => {
-  // Save cart items to localStorage whenever they change
-  localStorage.setItem('cartItems', JSON.stringify(cartItems));
-}, [cartItems]);
-
-
-//HEADER CART ICON
-const [cartItemsCount, setCartItemsCount] = useState(0);
-    const [showCartSidebar, setShowCartSidebar] = useState(false);
-
-    useEffect(() => {
-      // Load cart items from localStorage on component mount
-      const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-      setCartItemsCount(storedCartItems.length);
-    }, []);
-
-    // In your CartContext or App.js
-const toggleCartSidebar = () => {
-  setShowCartSidebar((prevState) => !prevState);
-};
-
 
 
 //ETCHING ALL THE PRODUCTS
 
 const [menProducts, setMenProducts] = useState([]);
 const [womenProducts, setWomenProducts] = useState([]);
+const [products,setProducts] = useState();
 
 useEffect(() => {
   const fetchProducts = async () => {
     try {
       const response = await axios.get(`${hostLink}/products`);
+      setProducts(response.data);
       // Filter products for men
       const menProducts = response.data.filter((product) => product.categories.toLowerCase() === 'men');
       setMenProducts(menProducts)
@@ -229,41 +78,96 @@ useEffect(() => {
 }, [hostLink]);
 
 
-  
+
   return (
     <Router>
       <> 
 
-      <CartContext.Provider value={{addToCart,removeFromCart,increaseQuantity,decreaseQuantity,handleCloseSidebar,cartItems,sidebarVisible,setSidebarVisible, cartItemsCount,showCartSidebar,toggleCartSidebar}}>
-        <Header hostlink={hostLink} />
-        </CartContext.Provider>
+
+    <WishlistContext>
+      <CartContext>
+      <TokenContext>
+          <Header hostlink={hostLink} />
+      </TokenContext>
+      </CartContext>
+    </WishlistContext>
 
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
 
           <Route path="/men" element={ 
-          <CartContext.Provider value={{addToCart,removeFromCart,increaseQuantity,decreaseQuantity,handleCloseSidebar,cartItems,sidebarVisible,setSidebarVisible,hostLink}}>
-            <MenPage  menProducts={menProducts} hostlink={hostLink}/>
-            </CartContext.Provider>
+          <WishlistContext>
+            <CartContext>
+              <MenPage  
+                menProducts={menProducts} 
+                hostlink={hostLink}
+              />
+              </CartContext>
+          </WishlistContext>
           } />
 
           <Route path="/women" element={
-          <CartContext.Provider value={{addToCart,removeFromCart,increaseQuantity,decreaseQuantity,handleCloseSidebar,cartItems,sidebarVisible,setSidebarVisible,hostLink}}>
-          <WomenPage womenProducts={womenProducts} hostlink={hostLink}/>
-          </CartContext.Provider>
+          <WishlistContext>
+            <CartContext>
+                <WomenPage 
+                  womenProducts={womenProducts} 
+                  hostlink={hostLink}
+                />
+
+            </CartContext>
+          </WishlistContext>
           } />
+
+          <Route path="/wishlist" element={
+          <WishlistContext >
+            
+              <WishlistPage hostLink={hostLink}/>
+           
+          </WishlistContext>
+          } />
+          
 
           <Route path="/contact" element={<ContactPage />} />
 
-          <Route path={`/products/:productId`} element={<ProductDetailsPage hostlink={hostLink}/>} />
+          
+          <Route path={`/products/:productId`} element={
+            <CartContext>
+              <ProductDetailsPage hostlink={hostLink}/>
+            </CartContext>
+          } />
+          
+          
+            <Route  path="/login" element={
+              <LoginContext hostlink={hostLink}>
+              <TokenContext>
+                <LoginPage hostlink = {hostLink}/>
+                </TokenContext>
+                </LoginContext>
+            } />
+          
 
-          <Route exact path="/login" element={<LoginForm hostlink = {hostLink}/>} />
-          <Route exact path="/forgot-password" element={<ForgotPassword hostlink = {hostLink}/>} />
-          <Route exact path="/reset-password" element={<ResetPassword hostlink = {hostLink}/>} />
-          <Route exact path="/my-account" element={<MyAccount hostlink = {hostLink}/>} />
-          <Route exact path="/signup" element={<SignupForm hostlink = {hostLink}/>} />
-          <Route exact path="/view-addresses" element={<ViewAddress hostlink = {hostLink}/>} />
+          <Route  path="/forgot-password" element={<ForgotPassword hostlink = {hostLink}/>} />
+          <Route  path="/reset-password" element={<ResetPassword hostlink = {hostLink}/>} />
+          <Route  path="/my-zf" element={
+            <TokenContext>
+            <UserDetails hostlink={hostLink}>
+              <LocationInfo>
+                
+                  <MyAccount hostlink = {hostLink}/>
+                
+              </LocationInfo>
+            </UserDetails>
+            </TokenContext>
+          } />
+          <Route  path="/signup" element={<SignupForm hostlink = {hostLink}/>} />
+          <Route  path="/view-addresses" element={
+              <TokenContext>
+                <UserDetails hostlink={hostLink}>
+                  <ViewAddress hostlink = {hostLink}/>
+                </UserDetails>
+              </TokenContext>
+          } />
 
           
           <Route exact path="/admin" element={<AdminLogin hostlink = {hostLink}/>} />
@@ -273,9 +177,10 @@ useEffect(() => {
           <Route 
           path={`${path}/add-product`} 
           element={
-            <ProductContext.Provider value={{handleSubmit,handleFileChange,handleImageRemove,formData,setFormData}}>
+            <AddProductContext>
               <AddProduct/>
-            </ProductContext.Provider>
+
+            </AddProductContext>
           } />
 
           
@@ -283,9 +188,10 @@ useEffect(() => {
           <Route 
           path={`${path}/edit-product/:productId`} 
           element={
-            <ProductContext.Provider value={{handleSubmitEdit,handleFileChange,handleImageRemove,formData,setFormData}}>
+            <AddProductContext>
               <EditProduct hostLink={hostLink}/>
-            </ProductContext.Provider>
+              
+              </AddProductContext>
                     } />
 
           {/* Add Route for displaying all products with edit and delete buttons */}
@@ -294,16 +200,30 @@ useEffect(() => {
           {/* Add Route for categories */}
           <Route path={`${path}/categories`} element={<Categories hostlink={hostLink} />} />
 
+          {/* CART & CHECKOUT PAGE */}
+          <Route path="/cart" element={
+           <CartContext>
+            
+                <CartPage  hostLink={hostLink}/>
 
-         
+            </CartContext>
+          }/>
+          <Route path="/checkout" element={<CheckoutPage hostlink={hostLink} />} />
 
         </Routes>
         <Footer/>
+        <LoginContext hostlink={hostLink}>
         <LoginSidebar hostlink={hostLink}/>
-        <SearchModal/>
-        <CartContext.Provider value={{addToCart,removeFromCart,increaseQuantity,decreaseQuantity,handleCloseSidebar,cartItems,sidebarVisible,setSidebarVisible, cartItemsCount,showCartSidebar,toggleCartSidebar}}>
+        </LoginContext>
+        
+        <SearchModal  products={products} hostlink={hostLink} />
+        
+        <CartContext>
+
         <CartSidebar hostlink={hostLink} />
-        </CartContext.Provider>
+
+        </CartContext>
+
         <MobileHeader/>
 						
       </>

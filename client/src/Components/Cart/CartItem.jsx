@@ -1,10 +1,10 @@
 import React,{useContext} from 'react';
-import {CartContext} from '../../App';
+import {CartContextC} from '../Context/CartContext';
 import { Link } from 'react-router-dom';
 
 const CartItem = ({ hostlink,item}) => {
 
-  const {removeFromCart,increaseQuantity,decreaseQuantity} = useContext(CartContext); 
+  const {removeFromCart,increaseQuantity,decreaseQuantity} = useContext(CartContextC); 
 
   return (
 
@@ -16,19 +16,22 @@ const CartItem = ({ hostlink,item}) => {
     </div>
     <div className="mini-cart-item__summary">
       <span className="mini-cart-item__name">
-        <Link to={"/products/"+item.id}>{item.name}</Link>
+        <Link to={"/products/"+item.id}>{item.name}</Link><br/>
+        {/* Display selected variations */}
+        <span>Color: {item.selectedVariations.color}, Size: {item.selectedVariations.size}</span>
+        
       </span>
       <div className="mini-cart-item__qty">
         <span className="label">Qty</span>
         <div className="quantity quantity-dropdown">
           <label className="screen-reader-text">Quantity: {item.quantity}</label>
           <span className="svg-icon icon-minus size-normal qty-button decrease" onClick={() => decreaseQuantity(item.id)}></span>
-          <input type="number" className="input-text qty text" step="1" min="0" max="50" defaultValue="1" title="Qty"/>
+          <input type="number" className="input-text qty text" step="1" min="0" max="50" defaultValue={item.quantity} title="Qty"/>
           <span className="svg-icon icon-plus size-normal qty-button increase" onClick={() => increaseQuantity(item.id)}></span>
         </div>
         <span className="price">
           <span className="amount">
-            <span className="currencySymbol">$</span> ${item.price}
+            <span className="currencySymbol">$</span>{item.price}
           </span>
         </span>
       </div>

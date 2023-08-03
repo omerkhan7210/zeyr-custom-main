@@ -1,7 +1,7 @@
 import React from "react";
 import WishlistItem from "./WishlistItem"
 
-const WishlistPage = ()=>{
+const WishlistPage = ({hostLink})=>{
     return (
         <div id="content" className="site-content">
 			<div className="site-content-container container">
@@ -11,23 +11,9 @@ const WishlistPage = ()=>{
 							<header className="entry-header"><h1 className="entry-title">Wishlist </h1></header>
 							<div className="entry-content">
 								<div className="soo-wishlist">
-									<table className="shop_table shop_table_responsive wishlist_table">
-										<thead>
-											<tr>
-												<th className="product-thumbnail">Product</th>
-												<th className="product-name">&nbsp;</th>
-												<th className="product-price">Price</th>
-												<th className="product-stock-status">Stock status</th>
-												<th className="product-add-to-cart">&nbsp;</th>
-												<th className="product-remove">&nbsp;</th>
-											</tr>
-										</thead>
-										<tbody>
 
-											<WishlistItem/>
+											<WishlistItem hostLink={hostLink}/>
 
-										</tbody>
-									</table>
 									<div className="soo-wishlist-share wishlist-share">
 										<h4>Share on</h4>
 										<ul>

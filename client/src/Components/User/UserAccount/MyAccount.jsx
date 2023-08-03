@@ -1,47 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate,Link } from 'react-router-dom';
-import jwtDecode from 'jwt-decode'; // Import jwt-decode library
-import axios from 'axios';
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
-const MyAccount = ({hostlink}) => {
-  const history = useNavigate();
-  const [accountDetails, setAccountDetails] = useState(null);
+import { LocationInfoContext } from '../../Context/LocationInfo';
+import { UserDetailsContext } from '../../Context/UserDetails';
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const token = getToken();
-
-      if (!token) {
-        // If there's no token, redirect to the login page
-        history('/login');
-        return;
-      }
-
-      // Check if the token is expired
-      const decodedToken = jwtDecode(token);
-      if (decodedToken.exp < Date.now() / 1000) {
-        // If the token is expired, remove the token from the cookie and redirect to the login page
-        document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        history('/login');
-        return;
-      }
-
-      // Fetch account details from the server
-      try {
-        const response = await axios.get(`${hostlink}/account-details`, {
-          headers: {
-            Authorization: `Bearer ${token}`, // Pass the JWT token in the request headers
-          },
-        });
-        setAccountDetails(response.data);
-      } catch (error) {
-        console.error(error);
-        // Handle error fetching account details
-      }
-    };
-
-    checkAuth();
-  }, [hostlink, history]);
+const MyAccount = () => {
+ 
+  const {accountDetails,history} = useContext(UserDetailsContext);
+  const {countryName} = useContext(LocationInfoContext);
 
 
   const handleLogout = () => {
@@ -50,26 +16,14 @@ const MyAccount = ({hostlink}) => {
 
     history('/login'); // Redirect to the login page after logout
   };
-  const getToken = () => {
-    // Get the token from the cookie
-    const tokenCookie = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('token='));
-  
-    if (tokenCookie) {
-      const token = tokenCookie.split('=')[1];
-      return token;
-    }
-  
-    return null; // Token not found or empty cookie, return null or any other appropriate value
-  };
+ 
   
 
   return (
-    <div className="my-account-container">
+    <div className="d-flex justify-center align-center g1 flex-c">
       <h1 className="signup-heading">Account</h1>
-      <button onClick={handleLogout} className="form-btn">Logout</button>
-      <div className="user-profile">
+      <button onClick={handleLogout} className="button small" >Logout</button>
+      <div className="user-profile d-flex justify-around w100 pi2">
         <div className="left-side-content">
         <h2>Order History</h2>
         <p>You have no orders for now..</p>
@@ -80,9 +34,8 @@ const MyAccount = ({hostlink}) => {
         {accountDetails ? (
           <div className="profile-details">
             <p>{accountDetails.fname + " " + accountDetails.lname}</p>
-            <p>{accountDetails.email}</p>
-            <Link to="/view-addresses">View addresses</Link>
-            {/* Add other account details */}
+            {countryName && <p>{countryName}</p>}
+            <Link to="/view-addresses" className="button small">View addresses</Link>
           </div>
         ) : (
           <p>Loading account details...</p>

@@ -55,19 +55,20 @@ const AdminDashboard = ({hostlink}) => {
       return (
         
         
-        <div className='signup-container'>
-        <h2 className='signup-heading'>Admin Dashboard</h2>
-        <ul className='dashboard-links'>
+        <div className='d-flex flex-c justify-center align-center g1'>
+        <h2>Admin Dashboard</h2>
+        <a  onClick={handleLogout} className='button medium'>Log out</a>
+        <ul className='d-flex justify-evenly g1' style={{listStyleType:'none',padding:'0'}}>
           <li>
-            <Link to={`${path}/add-product`}>Add Product</Link>
+            <Link to={`${path}/add-product`} className='button medium'>Add Product</Link>
           </li>
           <li>
-            <Link to={`${path}/product-list`}>Product List</Link>
+            <Link to={`${path}/product-list`} className='button medium'>Product List</Link>
           </li>
           <li>
-            <Link to={`${path}/categories`}>Categories</Link>
+            <Link to={`${path}/categories`} className='button medium'>Categories</Link>
           </li>
-          <li><a  onClick={handleLogout}>Log out</a></li>
+         
         </ul>
         </div>
         

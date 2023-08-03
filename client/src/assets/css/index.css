@@ -391,6 +391,9 @@ td {
     .mauto{
       margin:auto;
     }
+    .nomargin p{
+      margin-bottom: 1px;
+    }
 
 /* header.css */
 

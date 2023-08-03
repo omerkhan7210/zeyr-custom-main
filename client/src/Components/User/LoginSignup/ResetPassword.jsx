@@ -23,27 +23,32 @@ const ResetPassword = ({hostlink}) => {
   };
 
   return (
-    <div className='signup-container'>
-      <h2 className="signup-heading">Reset Password</h2>
-      <form onSubmit={handleSubmit} className="signup-form">
-        <div>
-          <label>Email:</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </div>
-        <div>
-          <label>OTP Code:</label>
-          <input type="text" value={otpCode} onChange={(e) => setOtpCode(e.target.value)} required />
-        </div>
-        <div>
-          <label>New Password:</label>
+    <div className='d-flex align-center justify-center flex-c w100'>
+      <h2 >Reset Password</h2>
+      <form onSubmit={handleSubmit} className='w33  products-form products-form-login login'>
+      {message && <p>{message}!</p>}
+      <p className="form-row w100">
+          
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder='Enter your Email' className='input-text w100'/>
+        </p>
+        <p className="form-row w100">
+          
+          <input type="text" value={otpCode} onChange={(e) => setOtpCode(e.target.value)} required placeholder='Enter OTP Code' className='input-text w100'/>
+        </p>
+        <p className="form-row w100">
+          
           <input
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             required
+            className='input-text w100'
+            placeholder='Enter your New Password'
           />
-        </div>
+        </p>
+        <p className="form-row w100 d-flex justify-center">
         <button type="submit" className='form-btn'>Reset Password</button>
+        </p>
       </form>
       {message && <p>{message}</p>}
     </div>

@@ -1899,7 +1899,8 @@ body.offcanvas-opened {
 	text-align: center;
 	justify-self: flex-end;
 	margin-top: auto;
-	margin-bottom: 0;
+	margin-top:5px;
+	margin-bottom: 10px;
 }
 
 .login-panel .panel-content form.login .lost_password a,
@@ -2500,7 +2501,7 @@ body.modal-opened {
 
 .search-modal .modal-content {
 	max-height: 100%;
-	top: 35%;
+	top: 10%;
 	transition: top 0.8s;
 }
 
@@ -2570,7 +2571,7 @@ body.modal-opened {
 
 .search-modal .search-result {
 	position: relative;
-	padding-top: 70px;
+	padding-top: 10px;
 	opacity: 0;
 	overflow: hidden;
 }
@@ -5779,10 +5780,6 @@ hr.divider {
 	background-color: #fff;
 }
 
-.konte-product-grid ul.products {
-	display: flex;
-	flex-wrap: wrap;
-}
 
 .konte-product-grid ul.products:before, .konte-product-grid ul.products:after {
 	display: none;
@@ -10770,7 +10767,7 @@ video {
 }
 
 .featured-content-carousel .featured-item.loading {
-	background-image: url("../assets/images/loading.svg");
+	background-image: url("/images/loading.svg");
 	background-size: auto;
 }
 
@@ -13843,20 +13840,11 @@ table.my_account_orders tbody .products-orders-table__cell-order-actions {
  * Products
  */
 ul.products {
-	margin: 0 -20px;
 	padding: 0;
 	list-style: none;
 }
 
-ul.products:before, ul.products:after {
-	content: "";
-	display: table;
-	table-layout: fixed;
-}
 
-ul.products:after {
-	clear: both;
-}
 
 ul.products li.product {
 	position: relative;
@@ -13974,14 +13962,15 @@ ul.products li.product .price del {
 
 ul.products li.product .buttons {
 	text-align: right;
-	padding-top: 15px;
+	padding-top: 0;
 	position: absolute;
 	left: 20px;
-	right: 20px;
+	right: 10px;
 	height: 40px;
 	opacity: 0;
-	transform: translateY(50%);
+	transform: translateY(-20%);
 	transition: 0.4s;
+	z-index: 99999;
 }
 
 ul.products li.product .button {
@@ -13995,7 +13984,7 @@ ul.products li.product .button {
 
 ul.products li.product .button:first-child {
 	font-weight: 600;
-	float: left;
+	float: right;
 	margin-left: 0;
 }
 
@@ -18850,6 +18839,7 @@ table.wishlist_table th {
 }
 
 table.wishlist_table td {
+	text-align:center;
 	padding: 20px 0;
 }
 
@@ -26081,9 +26071,128 @@ label.products-form__label-for-checkbox :checked ~ span:after {
 		min-width: auto;
 	}
 }
-
+/* 
 .product {
 border:1px solid rgba(0,0,0,0.1);
 margin:1px;
-padding:20px 5px 20px 20px !important;
+padding:10px 5px !important;
+width:100%!important;
+} */
+
+/* Styling for OTP popup overlay */
+.otp-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+/* Styling for OTP popup container */
+.otp-popup-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  animation: fade-in 0.3s;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Styling for OTP popup close button */
+.otp-popup-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+}
+
+/* Styling for OTP input */
+.otp-input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Styling for OTP verify button */
+.otp-verify-btn {
+  background-color: black;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  line-height:20px;
+}
+
+/* Center the OTP popup on the page */
+.otp-popup-overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Styling for loading icon overlay */
+.loading-icon-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Styling for loading icon container */
+.loading-icon-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  max-width: 200px;
+  width: 80%;
+  text-align: center;
+}
+
+/* Styling for loading spinner */
+.loading-spinner {
+  border: 4px solid rgba(0, 0, 0, 0.3);
+  border-top: 4px solid #007bff; /* Loading spinner color (blue) */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+

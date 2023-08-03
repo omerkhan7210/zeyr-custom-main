@@ -1,12 +1,12 @@
 import React,{useContext} from 'react';
-import ProductAddEditForm from './ProductAddEditForm';
-import { ProductContext } from "../../../App";
+import ProductAddEditForm from './ProductAddEditForm/ProductAddEditForm';
+import { AddProductAdminContext } from '../../Context/AddProductContext';
 
 
 
 const AddProduct = () => {
 
-  const {handleSubmit} = useContext(ProductContext)
+  const {handleSubmit} = useContext(AddProductAdminContext)
 
   return (
     <div className='signup-container '>

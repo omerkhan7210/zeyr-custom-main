@@ -10766,7 +10766,7 @@ video {
 }
 
 .featured-content-carousel .featured-item.loading {
-	background-image: url("../assets/images/loading.svg");
+	background-image: url("/images/loading.svg");
 	background-size: auto;
 }
 

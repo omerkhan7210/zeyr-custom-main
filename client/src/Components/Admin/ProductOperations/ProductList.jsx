@@ -30,9 +30,20 @@ const ProductList = ({ hostlink }) => {
     }
   };
 
+  // Handle duplication of a product
+const handleDuplicate = async (productId) => {
+  try {
+    const response = await axios.post(`${hostlink}/products/${productId}/duplicate`);
+    // Fetch updated product list from the server after duplication
+    fetchProducts();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
   return (
 
-    <div className='signup-container table-container'>
+    <div className='d-flex justify-center align-center g1 flex-c w75 mauto'>
       {/* List of Products */}
       <h3 className='signup-heading'>Products</h3>
       <Link to='/dashboard'>Return to dashboard</Link>
@@ -57,8 +68,9 @@ const ProductList = ({ hostlink }) => {
               <td>{product.shortDescription}</td>
               <td>
                  {/* Edit Button: Redirect to the edit product route */}
-                 <Link to={`/dashboard/edit-product/${product.id}`}><button>Edit</button></Link>
-                <button onClick={() => handleDelete(product.id)}>Delete</button>
+                 <Link to={`/dashboard/edit-product/${product.id}`} className='button small' style={{marginBottom:'10px'}}>Edit</Link>
+                <button onClick={() => handleDelete(product.id)} className='button small' style={{marginBottom:'10px'}}>Delete</button>
+                <button onClick={() => handleDuplicate(product.id)} className='button small'>Duplicate</button>
               </td>
             </tr>
           ))}
